@@ -1,0 +1,34 @@
+# Plugin auto-download list for itzg/minecraft-server
+#
+# This file is read by the container at startup. Each URL is downloaded into
+# /data/plugins/ before the server process starts. Lines beginning with # are
+# ignored. itzg follows HTTP redirects, so redirect-based URLs work.
+#
+# Deploy this file to: /srv/minecraft/data/plugins.txt
+# (scripts/02-deploy.sh handles this automatically)
+# ---------------------------------------------------------------------------
+
+# ── Bedrock Edition bridge ──────────────────────────────────────────────────
+# GeyserMC: translates Bedrock ↔ Java protocol on UDP 19132
+# Floodgate: authenticates Bedrock players without a Java Edition account
+# These two must always be installed together.
+https://download.geysermc.org/v2/projects/geyser/versions/latest/builds/latest/downloads/spigot
+https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/latest/downloads/spigot
+
+# ── Performance profiler ────────────────────────────────────────────────────
+# Spark: low-overhead CPU/memory/GC profiler. Run /spark profiler to diagnose lag.
+# Redirects to latest stable release; itzg follows the redirect automatically.
+https://spark.lucko.me/download
+
+# ── Chunk pre-generator ─────────────────────────────────────────────────────
+# Chunky: pre-generates chunks before players explore, eliminating the largest
+# source of lag on the RPi4. Run once at setup (see scripts/04-pregen.sh).
+# If this URL fails, download the Paper JAR from:
+#   https://hangar.papermc.io/pop4959/Chunky
+# and place it manually in /srv/minecraft/data/plugins/
+https://hangar.papermc.io/api/v1/projects/Chunky/versions/latest/PAPER/download
+
+# ── Optional: Permissions manager ──────────────────────────────────────────
+# LuckPerms — download the latest Bukkit JAR from https://luckperms.net/download
+# and place it in /srv/minecraft/data/plugins/ (no stable redirect URL available)
+# https://download.luckperms.net/XXXX/bukkit/loader/LuckPerms-Bukkit-X.X.XXX.jar

@@ -1,0 +1,69 @@
+# Podman Quadlet container unit — Purpur Minecraft Server
+# Deploy to: /etc/containers/systemd/minecraft.container
+# Activate: systemctl daemon-reload && systemctl enable --now minecraft.service
+
+[Unit]
+Description=Purpur Minecraft Server (Java + Bedrock via GeyserMC)
+Documentation=https://github.com/itzg/docker-minecraft-server
+After=network-online.target local-fs.target
+Wants=network-online.target
+
+[Container]
+Image=docker.io/itzg/minecraft-server:java21
+ContainerName=minecraft
+
+# Networking — TCP for Java Edition clients, UDP for Bedrock via GeyserMC
+PublishPort=25565:25565
+PublishPort=19132:19132/udp
+
+# Data volume — :Z applies correct SELinux label for rootful Podman on Fedora
+Volume=/srv/minecraft/data:/data:Z
+
+# ── Required ───────────────────────────────────────────────────────────────
+Environment=EULA=TRUE
+
+# ── Server type ────────────────────────────────────────────────────────────
+Environment=TYPE=PURPUR
+Environment=VERSION=LATEST
+
+# ── Memory ─────────────────────────────────────────────────────────────────
+# 4 GB RPi4 → MEMORY=3G
+# 8 GB RPi4 → MEMORY=6G
+# Always keep Xms == Xmx (G1GC performs best with fixed heap)
+Environment=MEMORY=3G
+
+# Applies Aikar's full G1GC flag set automatically
+Environment=USE_AIKAR_FLAGS=true
+
+# ── Server properties (set by itzg at container start) ─────────────────────
+Environment=VIEW_DISTANCE=6
+Environment=SIMULATION_DISTANCE=4
+Environment=MAX_PLAYERS=20
+Environment=NETWORK_COMPRESSION_THRESHOLD=256
+Environment=SPAWN_PROTECTION=0
+Environment=DIFFICULTY=normal
+Environment=ONLINE_MODE=true
+Environment=LEVEL_TYPE=minecraft:normal
+Environment=MOTD=Purpur Minecraft Server
+
+# ── Plugin auto-download ────────────────────────────────────────────────────
+# itzg reads this file and downloads each listed URL into /data/plugins/
+Environment=PLUGINS_FILE=/data/plugins.txt
+
+# ── Logging ────────────────────────────────────────────────────────────────
+Environment=ENABLE_ROLLING_LOGS=true
+Environment=LOG_TIMESTAMP=true
+
+# ── Auto-update ────────────────────────────────────────────────────────────
+# When podman-auto-update.timer fires, pulls the latest java21 image digest
+# and restarts this service. Requires fully-qualified image name above.
+AutoUpdate=registry
+
+[Service]
+Restart=always
+# Allow extra time on first run — Purpur JAR + plugin JARs all download here
+TimeoutStartSec=600
+TimeoutStopSec=90
+
+[Install]
+WantedBy=multi-user.target
