@@ -18,7 +18,8 @@ https://download.geysermc.org/v2/projects/floodgate/versions/latest/builds/lates
 # ── Performance profiler ────────────────────────────────────────────────────
 # Spark: low-overhead CPU/memory/GC profiler. Run /spark profiler to diagnose lag.
 # Redirects to latest stable release; itzg follows the redirect automatically.
-https://spark.lucko.me/download
+#https://spark.lucko.me/download
+#https://ci.lucko.me/job/spark/525/artifact/spark-bukkit/build/libs/spark-1.10.173-bukkit.jar
 
 # ── Chunk pre-generator ─────────────────────────────────────────────────────
 # Chunky: pre-generates chunks before players explore, eliminating the largest
@@ -26,7 +27,7 @@ https://spark.lucko.me/download
 # If this URL fails, download the Paper JAR from:
 #   https://hangar.papermc.io/pop4959/Chunky
 # and place it manually in /srv/minecraft/data/plugins/
-https://hangar.papermc.io/api/v1/projects/Chunky/versions/latest/PAPER/download
+https://hangar.papermc.io/api/v1/projects/Chunky/versions/1.5.3/PAPER/download
 
 # ── Optional: Permissions manager ──────────────────────────────────────────
 # LuckPerms — download the latest Bukkit JAR from https://luckperms.net/download
