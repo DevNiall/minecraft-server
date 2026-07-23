@@ -44,8 +44,12 @@ Environment=NETWORK_COMPRESSION_THRESHOLD=256
 Environment=SPAWN_PROTECTION=0
 Environment=DIFFICULTY=normal
 Environment=ONLINE_MODE=true
-Environment=LEVEL_TYPE=minecraft:normal
-Environment=MOTD=Purpur Minecraft Server
+Environment=LEVEL_TYPE=minecraft:flat
+Environment=GAMEMODE=creative
+Environment=FORCE_GAMEMODE=true
+# Whitelist — add players with: podman exec minecraft rcon-cli whitelist add <name>
+Environment=ENABLE_WHITELIST=true
+Environment=MOTD=The Oh Yo Mines
 
 # ── Plugin auto-download ────────────────────────────────────────────────────
 # itzg reads this file and downloads each listed URL into /data/plugins/
