@@ -17,7 +17,8 @@ PublishPort=25565:25565
 PublishPort=19132:19132/udp
 
 # Data volume — :Z applies correct SELinux label for rootful Podman on Fedora
-Volume=/srv/minecraft/data:/data:Z
+# Path is substituted by 02-deploy.sh from config.env (default /opt/minecraft/data)
+Volume=/opt/minecraft/data:/data:Z
 
 # ── Required ───────────────────────────────────────────────────────────────
 Environment=EULA=TRUE

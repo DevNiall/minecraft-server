@@ -20,9 +20,11 @@ cp "$REPO_DIR/plugins.txt" "$DATA_DIR/plugins.txt"
 ok "plugins.txt deployed"
 
 # ── 2. Install Quadlet unit ─────────────────────────────────────────────────
-info "Installing Quadlet container unit..."
+info "Installing Quadlet container unit (data path: $DATA_DIR)..."
 mkdir -p "$QUADLET_DIR"
-cp "$REPO_DIR/systemd/minecraft.container" "$QUADLET_DIR/minecraft.container"
+sed "s|/opt/minecraft/data|${DATA_DIR}|g" \
+    "$REPO_DIR/systemd/minecraft.container" \
+    > "$QUADLET_DIR/minecraft.container"
 ok "Quadlet unit installed at $QUADLET_DIR/minecraft.container"
 
 # ── 3. Reload systemd — Quadlet generator creates minecraft.service ─────────

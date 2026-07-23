@@ -33,7 +33,7 @@ sudo bash scripts/01-system-setup.sh
 
 - Updates Fedora via `dnf5`
 - Installs `podman` and `yq`
-- Detects and mounts the USB SSD at `/srv/minecraft` with `noatime`
+- Creates install directory at `/opt/minecraft` (override with `MINECRAFT_DIR` env var)
 - Opens TCP 25565 and UDP 19132 in firewalld
 - Enables `podman-auto-update.timer`
 
@@ -146,7 +146,7 @@ Spark opens a flamegraph URL showing which methods are consuming CPU time. Real-
 
 ## Backups
 
-`scripts/backup.sh` rsyncs world directories and plugin configs (including the Floodgate `key.pem`) to `/srv/backups/minecraft/`, retaining 7 days.
+`scripts/backup.sh` rsyncs world directories and plugin configs (including the Floodgate `key.pem`) to `<MINECRAFT_DIR>/backups/` (default `/opt/minecraft/backups`), retaining 7 days.
 
 Install as a daily cron job:
 
@@ -173,23 +173,23 @@ To pin to a specific Minecraft version and prevent unattended game updates, set 
 ## Directory layout on the Pi
 
 ```
-/srv/minecraft/
-└── data/                      ← container /data mount (USB SSD)
-    ├── plugins.txt
-    ├── plugins/
-    │   ├── Geyser-Spigot/
-    │   │   └── config.yml
-    │   └── floodgate/
-    │       └── key.pem        ← back this up off-device
-    ├── world/
-    ├── world_nether/
-    ├── world_the_end/
-    ├── config/
-    │   └── paper-world-defaults.yml
-    ├── spigot.yml
-    └── purpur.yml
+/opt/minecraft/                ← default; override with MINECRAFT_DIR env var
+├── data/                      ← container /data mount
+│   ├── plugins.txt
+│   ├── plugins/
+│   │   ├── Geyser-Spigot/
+│   │   │   └── config.yml
+│   │   └── floodgate/
+│   │       └── key.pem        ← back this up off-device
+│   ├── world/
+│   ├── world_nether/
+│   ├── world_the_end/
+│   ├── config/
+│   │   └── paper-world-defaults.yml
+│   ├── spigot.yml
+│   └── purpur.yml
+└── backups/                   ← daily rsync backups (7-day rotation)
 
-/srv/backups/minecraft/        ← daily rsync backups (7-day rotation)
 /etc/containers/systemd/
 └── minecraft.container        ← Quadlet unit
 ```
