@@ -65,7 +65,8 @@ Stops the server, patches the following files using `yq`, then restarts:
 
 | File | Key changes |
 |---|---|
-| `config/paper-world-defaults.yml` | Reduce spawn limits, lower auto-save chunk rate, disable anti-xray |
+| `config/paper-world-defaults.yml` | Reduce spawn limits, lower auto-save chunk rate, disable anti-xray, block movement into unloaded chunks |
+| `config/paper-global.yml` | Limit chunk system worker + I/O threads to 2/1 (prevents starvation of the game thread on RPi4's 4-core CPU) |
 | `spigot.yml` | Reduce entity activation ranges, nerf spawner mobs, faster item despawn |
 | `purpur.yml` | Disable TPS catchup, alternate keepalive, lobotomise stuck villagers |
 | `plugins/Geyser-Spigot/config.yml` | Set `auth-type: floodgate` |

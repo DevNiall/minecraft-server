@@ -20,6 +20,7 @@ die()   { echo -e "\033[1;31m[FAIL]\033[0m  $*" >&2; exit 1; }
 # Verify first-run config files exist before proceeding
 REQUIRED_CONFIGS=(
     "$DATA_DIR/config/paper-world-defaults.yml"
+    "$DATA_DIR/config/paper-global.yml"
     "$DATA_DIR/spigot.yml"
     "$DATA_DIR/purpur.yml"
     "$DATA_DIR/plugins/Geyser-Spigot/config.yml"
@@ -49,6 +50,7 @@ BACKUP_TS=$(date +%Y%m%d-%H%M%S)
 CONFIG_BACKUP="$BACKUP_DIR/config-backup-$BACKUP_TS"
 mkdir -p "$CONFIG_BACKUP"
 cp "$DATA_DIR/config/paper-world-defaults.yml" "$CONFIG_BACKUP/"
+cp "$DATA_DIR/config/paper-global.yml" "$CONFIG_BACKUP/"
 cp "$DATA_DIR/spigot.yml" "$CONFIG_BACKUP/"
 cp "$DATA_DIR/purpur.yml" "$CONFIG_BACKUP/"
 cp "$DATA_DIR/plugins/Geyser-Spigot/config.yml" "$CONFIG_BACKUP/"
@@ -88,7 +90,30 @@ patch_yaml '.entities.spawning."ticks-per-spawn".monster = 4'       "$PAPER_WORL
 # Anti-xray off (significant CPU cost; re-enable if needed)
 patch_yaml '.anticheat."anti-xray".enabled = false'                 "$PAPER_WORLD"
 
+# Block players and entities from walking into unloaded chunks.
+# Without this, the server thread is forced to do a synchronous disk read
+# every time movement crosses into a chunk that hasn't loaded yet — the
+# root cause of the 10s watchdog stalls seen on the RPi4.
+patch_yaml '.chunks."prevent-moving-into-unloaded-chunks" = true'   "$PAPER_WORLD"
+
 ok "paper-world-defaults.yml patched"
+
+# ── paper-global.yml ────────────────────────────────────────────────────────
+PAPER_GLOBAL="$DATA_DIR/config/paper-global.yml"
+info "Patching $PAPER_GLOBAL ..."
+
+# Limit chunk system I/O + generation threads to 2.
+# Paper auto-detects thread count from available processors; on the RPi4's
+# 4-core ARM CPU the default (3) leaves only 1 core for the game thread,
+# causing tick stalls when chunks are being generated or loaded concurrently.
+patch_yaml '."chunk-system"."worker-threads" = 2'                    "$PAPER_GLOBAL"
+
+# Cap how many chunks can be loaded per tick from the queue.
+# Keeps the I/O burst from a player walking into unexplored area from
+# monopolising the server thread for multiple ticks in a row.
+patch_yaml '."chunk-system"."io-threads" = 1'                        "$PAPER_GLOBAL"
+
+ok "paper-global.yml patched"
 
 # ── spigot.yml ──────────────────────────────────────────────────────────────
 SPIGOT_YML="$DATA_DIR/spigot.yml"

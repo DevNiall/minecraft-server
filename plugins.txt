@@ -33,3 +33,16 @@ https://hangar.papermc.io/api/v1/projects/Chunky/versions/1.5.3/PAPER/download
 # LuckPerms — download the latest Bukkit JAR from https://luckperms.net/download
 # and place it in /srv/minecraft/data/plugins/ (no stable redirect URL available)
 # https://download.luckperms.net/XXXX/bukkit/loader/LuckPerms-Bukkit-X.X.XXX.jar
+
+# WorldEdit - A Minecraft Map Editor... that runs in-game! With selections, schematics, copy and paste, brushes, and scripting
+https://hangarcdn.papermc.io/plugins/EngineHub/WorldEdit/versions/7.4.4/PAPER/worldedit-bukkit-7.4.4.jar
+
+# EssentialsX/Essentials - The essential plugin suite for Paper! (and Spigot)
+https://github.com/EssentialsX/Essentials/releases/download/2.22.0/EssentialsX-2.22.0.jar
+
+# ViaVersion/ViaBackwards - Allow Java Edition clients with older versions to connect to your Minecraft server
+https://hangarcdn.papermc.io/plugins/ViaVersion/ViaVersion/versions/5.11.0/PAPER/ViaVersion-5.11.0.jar
+https://hangarcdn.papermc.io/plugins/ViaVersion/ViaBackwards/versions/5.11.0/PAPER/ViaBackwards-5.11.0.jar
+
+# Gecolay/GSit - Relax with other players on nice seats!
+https://hangarcdn.papermc.io/plugins/Gecolay/GSit/versions/3.5.1/PAPER/GSit-3.5.1.jar
